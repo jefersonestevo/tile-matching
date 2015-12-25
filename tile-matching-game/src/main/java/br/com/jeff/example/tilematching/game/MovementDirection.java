@@ -11,7 +11,7 @@ public class MovementDirection {
     private Direction xDirection;
     private Direction yDirection;
 
-    public MovementDirection(Point x, Point y) {
+    public MovementDirection(Position x, Position y) {
         if (x.getX() == y.getX()) {
             if (x.getY() > y.getY()) {
                 xDirection = Direction.UP;

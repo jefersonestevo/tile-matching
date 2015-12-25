@@ -1,6 +1,5 @@
 package br.com.jeff.example.tilematching.game;
 
-import br.com.jeff.example.tilematching.game.*;
 import br.com.jeff.example.tilematching.game.simple.NumberBoardGenerator;
 import br.com.jeff.example.tilematching.game.simple.NumberTyle;
 import br.com.jeff.example.tilematching.game.simple.SimplePointRule;
@@ -11,21 +10,15 @@ public class TileMatchingGameImplTest {
 
     private static TileMatchingGameImpl tileMatchingGame;
 
-    private static GameRule gameRule;
+    private static SimplePointRule gameRule;
 
     public static void init() {
-        gameRule = new SimplePointRule(5, 50);
+        gameRule = new SimplePointRule(10, 50);
         BoardGenerator boardGenerator = new NumberBoardGenerator(5, 5);
-
-//        String a = "02 02 03 03 02"
-//                + " 00 04 03 01 03"
-//                + " 01 01 02 02 01"
-//                + " 02 02 02 04 01"
-//                + " 02 04 04 03 02";
         String a = "02 02 03 03 02"
-                + " 00 04 03 03 03"
+                + " 00 04 03 03 02"
                 + " 01 01 02 02 03"
-                + " 02 02 02 04 01"
+                + " 02 02 02 04 02"
                 + " 02 04 04 03 02";
         boardGenerator = new NumberBoardGenerator(5, 5) {
             @Override
@@ -50,26 +43,36 @@ public class TileMatchingGameImplTest {
         String userInput = "";
         while (!"end".equals(userInput) && !tileMatchingGame.isFinished()) {
             printBoard(tileMatchingGame.getBoard());
-            System.out.println("Informe o primeiro ponto: ");
+            System.out.println("First position: ");
             userInput = new Scanner(System.in).nextLine();
             if ("end".equals(userInput)) {
                 break;
             }
-            Point x = getPoint(userInput);
+            Position x = getPosition(userInput);
             if (x == null) {
+                System.out.println("Invalid position. Please try again");
                 continue;
             }
-            System.out.println("Informe o segundo ponto: ");
+            System.out.println("Second position: ");
             userInput = new Scanner(System.in).nextLine();
             if ("end".equals(userInput)) {
                 break;
             }
-            Point y = getPoint(userInput);
+            Position y = getPosition(userInput);
             if (y == null) {
+                System.out.println("Invalid position. Please try again");
                 continue;
             }
 
-            tileMatchingGame.move(x, y);
+            if (tileMatchingGame.move(x, y)) {
+                System.out.format("Moved tile from position [%d, %d] to position [%d, %d]\n", x.getX(), x.getY(), y.getX(), y.getY());
+            }
+            else {
+                System.out.println("Can't do this. Please try another movement");
+            }
+            System.out.println("Movement number: " + gameRule.getCurrentMovements());
+            System.out.println("Your current score is: " + gameRule.getCurrentPoints());
+            System.out.println("============================================");
         }
 
         if (tileMatchingGame.isWon()) {
@@ -78,13 +81,16 @@ public class TileMatchingGameImplTest {
         else if (tileMatchingGame.isLost()) {
             System.out.println("YOU LOST");
         }
+        else {
+            System.out.println("GAME ENDED BY THE USER");
+        }
     }
 
-    protected static Point getPoint(String userInput) {
+    protected static Position getPosition(String userInput) {
         try {
             String x = userInput.split(",")[0].trim();
             String y = userInput.split(",")[1].trim();
-            return new Point(Integer.valueOf(x), Integer.valueOf(y));
+            return new Position(Integer.valueOf(x), Integer.valueOf(y));
         }
         catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

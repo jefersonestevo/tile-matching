@@ -1,6 +1,8 @@
 package br.com.jeff.example.tilematching.game;
 
-public interface Tile<T extends Tile> {
+import java.io.Serializable;
+
+public interface Tile<T extends Tile> extends Serializable {
 
     boolean isEqualTo(T tile);
 

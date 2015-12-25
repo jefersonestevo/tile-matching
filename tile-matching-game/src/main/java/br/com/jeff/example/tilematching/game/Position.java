@@ -1,10 +1,10 @@
 package br.com.jeff.example.tilematching.game;
 
-public class Point {
+public class Position {
     int x;
     int y;
 
-    public Point(int x, int y) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -22,10 +22,10 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Point point = (Point) o;
+        Position position = (Position) o;
 
-        if (x != point.x) return false;
-        return y == point.y;
+        if (x != position.x) return false;
+        return y == position.y;
 
     }
 
@@ -38,7 +38,7 @@ public class Point {
 
     @Override
     public String toString() {
-        return "Point{" +
+        return "Position{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';

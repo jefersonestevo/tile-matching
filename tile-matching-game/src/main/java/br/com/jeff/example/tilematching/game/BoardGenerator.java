@@ -4,6 +4,6 @@ public interface BoardGenerator {
 
     Board generateBoard();
 
-    Tile getNewTileForPosition(Point position);
+    Tile getNewTileForPosition(Position position);
 
 }

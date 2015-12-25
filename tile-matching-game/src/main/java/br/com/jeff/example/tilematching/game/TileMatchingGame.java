@@ -2,7 +2,7 @@ package br.com.jeff.example.tilematching.game;
 
 public interface TileMatchingGame {
 
-    boolean move(Point x, Point y);
+    boolean move(Position x, Position y);
 
     boolean isWon();
 

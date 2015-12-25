@@ -2,7 +2,7 @@ package br.com.jeff.example.tilematching.game.simple;
 
 import br.com.jeff.example.tilematching.game.Board;
 import br.com.jeff.example.tilematching.game.BoardGenerator;
-import br.com.jeff.example.tilematching.game.Point;
+import br.com.jeff.example.tilematching.game.Position;
 import br.com.jeff.example.tilematching.game.Tile;
 
 public class NumberBoardGenerator implements BoardGenerator {
@@ -27,7 +27,7 @@ public class NumberBoardGenerator implements BoardGenerator {
     }
 
     @Override
-    public Tile getNewTileForPosition(Point position) {
+    public Tile getNewTileForPosition(Position position) {
         return new NumberTyle(new Double(Math.random() * 5).intValue());
     }
 }

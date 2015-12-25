@@ -1,7 +1,6 @@
 package br.com.jeff.example.tilematching.game;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class TileMatchingGameImpl implements TileMatchingGame {
 
@@ -16,8 +15,11 @@ public class TileMatchingGameImpl implements TileMatchingGame {
     }
 
     @Override
-    public boolean move(Point x, Point y) {
-        // TODO - Validate if movement is possible and return false
+    public boolean move(Position x, Position y) {
+        if (!board.isValidMovement(x, y)) {
+            return false;
+        }
+
         gameRule.movementStarted();
         Tile tileX = board.getTile(x);
         Tile tileY = board.getTile(y);
@@ -28,13 +30,17 @@ public class TileMatchingGameImpl implements TileMatchingGame {
 
         board.swap(x, y);
 
-        destroyTilesIfMatched(x, y);
+        List<Set<Position>> tylesDestroyed = destroyTilesIfMatched(x, y);
 
         gameRule.movementEnded();
+
+        if (!tylesDestroyed.isEmpty()) {
+            // TODO - Destroy other tyles if possible
+        }
         return true;
     }
 
-    protected void createEventForDirection(Tile tile, Point currentPosition, Point destination, MovementDirection.Direction direction) {
+    protected void createEventForDirection(Tile tile, Position currentPosition, Position destination, MovementDirection.Direction direction) {
         EventType eventType = null;
         switch (direction) {
             case UP:
@@ -52,30 +58,28 @@ public class TileMatchingGameImpl implements TileMatchingGame {
         gameRule.onEvent(tile, currentPosition, destination, eventType);
     }
 
-    protected void destroyTilesIfMatched(Point... positions) {
+    protected List<Set<Position>> destroyTilesIfMatched(Position... positions) {
         int matchesToScore = 3;
 
-        for (Point position : positions) {
-            // FIXME - Ajustar toda esta regra
-            Set<Point> candidatesX = new LinkedHashSet<>();
-            fillCandidateTiles(position, candidatesX, board::getUpTile, (p) -> new Point(p.getX(), p.getY() - 1));
-            fillCandidateTiles(position, candidatesX, board::getDownTile, (p) -> new Point(p.getX(), p.getY() + 1));
-
-            Set<Point> candidatesY = new LinkedHashSet<>();
-            fillCandidateTiles(position, candidatesY, board::getLeftTile, (p) -> new Point(p.getX() - 1, p.getY()));
-            fillCandidateTiles(position, candidatesY, board::getRightTile, (p) -> new Point(p.getX() + 1, p.getY()));
+        List<Set<Position>> tylesDestroyed = new ArrayList<>();
+        for (Position position : positions) {
+            Set<Position> candidatesX = getCandidatesFromXAxis(position);
+            Set<Position> candidatesY = getCandidatesFromYAxis(position);
 
             if (candidatesX.size() >= matchesToScore && candidatesX.size() >= candidatesY.size()) {
                 destroyTilesForPositions(candidatesX);
+                tylesDestroyed.add(candidatesX);
             }
             else if (candidatesY.size() >= matchesToScore){
                 destroyTilesForPositions(candidatesY);
+                tylesDestroyed.add(candidatesY);
             }
         }
+        return tylesDestroyed;
     }
 
-    protected void destroyTilesForPositions(Set<Point> positions) {
-        for (Point position : positions) {
+    protected void destroyTilesForPositions(Set<Position> positions) {
+        for (Position position : positions) {
             gameRule.onEvent(board.getTile(position), position, null, EventType.DESTROYED);
 
             Tile newTile = boardGenerator.getNewTileForPosition(position);
@@ -84,19 +88,62 @@ public class TileMatchingGameImpl implements TileMatchingGame {
         }
     }
 
-    private void fillCandidateTiles(Point position, Set<Point> candidatePoints, Function<Point, Tile> getNextTile, Function<Point, Point> getNextPosition) {
-        Point currentPosition = position;
-        while (currentPosition != null) {
-            candidatePoints.add(currentPosition);
+    protected Set<Position> getCandidatesFromXAxis(Position position) {
+        int xPosition = position.getX();
+        Tile tile = board.getTile(position);
+
+        List<Set<Position>> allCandidates = new ArrayList<>();
+        Set<Position> candidates = null;
+        for (int i = 0; i < board.getHeight(); i++) {
+            Position currentPosition = new Position(xPosition, i);
             Tile currentTile = board.getTile(currentPosition);
-            Tile nextTile = getNextTile.apply(currentPosition);
-            if (nextTile != null && nextTile.isEqualTo(currentTile)) {
-                currentPosition = getNextPosition.apply(currentPosition);
+            if (currentTile != null && currentTile.isEqualTo(tile)) {
+                if (candidates == null) {
+                    candidates = new LinkedHashSet<>();
+                    allCandidates.add(candidates);
+                }
+                candidates.add(currentPosition);
             }
             else {
-                currentPosition = null;
+                candidates = null;
             }
         }
+
+        for (Set<Position> currentCandidateList : allCandidates) {
+            if (currentCandidateList.contains(position)) {
+                return currentCandidateList;
+            }
+        }
+        return Collections.emptySet();
+    }
+
+    protected Set<Position> getCandidatesFromYAxis(Position position) {
+        int yPosition = position.getY();
+        Tile tile = board.getTile(position);
+
+        List<Set<Position>> allCandidates = new ArrayList<>();
+        Set<Position> candidates = null;
+        for (int i = 0; i < board.getWidth(); i++) {
+            Position currentPosition = new Position(i, yPosition);
+            Tile currentTile = board.getTile(currentPosition);
+            if (currentTile != null && currentTile.isEqualTo(tile)) {
+                if (candidates == null) {
+                    candidates = new LinkedHashSet<>();
+                    allCandidates.add(candidates);
+                }
+                candidates.add(currentPosition);
+            }
+            else {
+                candidates = null;
+            }
+        }
+
+        for (Set<Position> currentCandidateList : allCandidates) {
+            if (currentCandidateList.contains(position)) {
+                return currentCandidateList;
+            }
+        }
+        return Collections.emptySet();
     }
 
     @Override

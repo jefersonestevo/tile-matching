@@ -20,47 +20,41 @@ public class Board implements Serializable {
         }
     }
 
-    public void replaceTile(Point point, Tile newTile) {
-        tiles[point.getX()][point.getY()] = newTile;
+    public boolean isValidMovement(Position x, Position y) {
+        if (!isInRange(x) || !isInRange(y)) {
+            return false;
+        }
+        if (x.equals(y)) {
+            return false;
+        }
+        int xDifference = x.getX() - y.getX();
+        if (xDifference < -1 || xDifference > 1) {
+            return false;
+        }
+        int yDifference = x.getY() - y.getY();
+        if (yDifference < -1 || yDifference > 1) {
+            return false;
+        }
+        return true;
     }
 
-    public MovementDirection swap(Point x, Point y) {
+    protected boolean isInRange(Position position) {
+        return position.getX() < width && position.getY() < height;
+    }
+
+    public void replaceTile(Position position, Tile newTile) {
+        tiles[position.getX()][position.getY()] = newTile;
+    }
+
+    public MovementDirection swap(Position x, Position y) {
         Tile tempTile = tiles[x.getX()][x.getY()];
         tiles[x.getX()][x.getY()] = tiles[y.getX()][y.getY()];
         tiles[y.getX()][y.getY()] = tempTile;
         return new MovementDirection(x, y);
     }
 
-    public Tile getTile(Point position) {
+    public Tile getTile(Position position) {
         return tiles[position.getX()][position.getY()];
-    }
-
-    public Tile getDownTile(Point point) {
-        if (point.getY() + 1 < tiles[point.getX()].length) {
-            return getTile(new Point(point.getX(), point.getY() + 1));
-        }
-        return null;
-    }
-
-    public Tile getUpTile(Point point) {
-        if (point.getY() - 1 >= tiles[point.getX()].length) {
-            return getTile(new Point(point.getX(), point.getY() - 1));
-        }
-        return null;
-    }
-
-    public Tile getLeftTile(Point point) {
-        if (point.getX() - 1 >= tiles.length) {
-            return getTile(new Point(point.getX() - 1, point.getY()));
-        }
-        return null;
-    }
-
-    public Tile getRightTile(Point point) {
-        if (point.getX() + 1 < tiles.length) {
-            return getTile(new Point(point.getX() + 1, point.getY()));
-        }
-        return null;
     }
 
     public Tile[][] getTiles() {

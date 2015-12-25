@@ -1,12 +1,14 @@
 package br.com.jeff.example.tilematching.game;
 
-public interface GameRule {
+import java.io.Serializable;
+
+public interface GameRule extends Serializable {
 
     void movementStarted();
 
     void movementEnded();
 
-    void onEvent(Tile tile, Point currentPosition, Point destination, EventType eventType);
+    void onEvent(Tile tile, Position currentPosition, Position destination, EventType eventType);
 
     GameResult getResult(Board board);
 }

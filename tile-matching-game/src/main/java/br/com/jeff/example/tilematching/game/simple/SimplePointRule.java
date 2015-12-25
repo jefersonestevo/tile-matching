@@ -23,7 +23,7 @@ public class SimplePointRule implements GameRule {
     }
 
     @Override
-    public void onEvent(Tile tile, Point currentPosition, Point destination, EventType eventType) {
+    public void onEvent(Tile tile, Position currentPosition, Position destination, EventType eventType) {
         if (EventType.DESTROYED.equals(eventType)) {
             currentPoints++;
         }
