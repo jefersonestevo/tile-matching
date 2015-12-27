@@ -61,7 +61,7 @@ public class TileMatchingGameImpl implements TileMatchingGame {
     protected List<Set<Position>> destroyTilesIfMatched(Position... positions) {
         int matchesToScore = 3;
 
-        List<Set<Position>> tylesDestroyed = new ArrayList<>();
+        List<Set<Position>> tylesDestroyed = new ArrayList<Set<Position>>();
         for (Position position : positions) {
             Set<Position> candidatesX = getCandidatesFromXAxis(position);
             Set<Position> candidatesY = getCandidatesFromYAxis(position);
@@ -92,14 +92,14 @@ public class TileMatchingGameImpl implements TileMatchingGame {
         int xPosition = position.getX();
         Tile tile = board.getTile(position);
 
-        List<Set<Position>> allCandidates = new ArrayList<>();
+        List<Set<Position>> allCandidates = new ArrayList<Set<Position>>();
         Set<Position> candidates = null;
         for (int i = 0; i < board.getHeight(); i++) {
             Position currentPosition = new Position(xPosition, i);
             Tile currentTile = board.getTile(currentPosition);
             if (currentTile != null && currentTile.isEqualTo(tile)) {
                 if (candidates == null) {
-                    candidates = new LinkedHashSet<>();
+                    candidates = new LinkedHashSet<Position>();
                     allCandidates.add(candidates);
                 }
                 candidates.add(currentPosition);
@@ -121,14 +121,14 @@ public class TileMatchingGameImpl implements TileMatchingGame {
         int yPosition = position.getY();
         Tile tile = board.getTile(position);
 
-        List<Set<Position>> allCandidates = new ArrayList<>();
+        List<Set<Position>> allCandidates = new ArrayList<Set<Position>>();
         Set<Position> candidates = null;
         for (int i = 0; i < board.getWidth(); i++) {
             Position currentPosition = new Position(i, yPosition);
             Tile currentTile = board.getTile(currentPosition);
             if (currentTile != null && currentTile.isEqualTo(tile)) {
                 if (candidates == null) {
-                    candidates = new LinkedHashSet<>();
+                    candidates = new LinkedHashSet<Position>();
                     allCandidates.add(candidates);
                 }
                 candidates.add(currentPosition);
