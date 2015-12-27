@@ -5,9 +5,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class TileMatchingActivity extends AppCompatActivity {
 
@@ -26,6 +30,26 @@ public class TileMatchingActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+        LinearLayout verticalLayout = (LinearLayout) findViewById(R.id.layout);
+
+        for (int i = 0; i < 5; i++) {
+            LinearLayout horizontalLayout = new LinearLayout(this);
+            horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+            for (int j = 0; j < 5; j++) {
+                final TextView textView = new TextView(this);
+                textView.setText("  " + i + j);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(TileMatchingActivity.this, textView.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                horizontalLayout.addView(textView);
+            }
+            verticalLayout.addView(horizontalLayout);
+        }
     }
 
     @Override
