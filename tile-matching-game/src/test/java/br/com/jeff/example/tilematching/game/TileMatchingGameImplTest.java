@@ -15,7 +15,7 @@ public class TileMatchingGameImplTest {
     public static void init() {
         gameRule = new SimplePointRule(10, 50);
         BoardGenerator boardGenerator = new NumberBoardGenerator(5, 5);
-        String a = "02 02 03 03 02"
+        final String a = "02 02 03 03 02"
                 + " 00 04 03 03 02"
                 + " 01 01 02 02 03"
                 + " 02 02 02 04 02"
