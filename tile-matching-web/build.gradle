@@ -9,8 +9,12 @@ buildscript {
     }
 }
 
+apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     maven { url "http://repo.spring.io/snapshot" }
