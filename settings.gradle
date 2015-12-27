@@ -1,0 +1,6 @@
+rootProject.name = 'tile-matching'
+include ':tile-matching-game'
+include ':tile-matching-web'
+
+project(':tile-matching-game').projectDir = "$rootDir/tile-matching-game" as File
+project(':tile-matching-web').projectDir = "$rootDir/tile-matching-web" as File
