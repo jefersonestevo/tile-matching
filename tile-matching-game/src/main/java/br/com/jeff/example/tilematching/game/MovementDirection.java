@@ -5,7 +5,7 @@ public class MovementDirection {
         UP,
         DOWN,
         LEFT,
-        RIGHT;
+        RIGHT
     }
 
     private Direction xDirection;

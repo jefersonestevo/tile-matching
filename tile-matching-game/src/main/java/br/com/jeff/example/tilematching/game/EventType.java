@@ -6,5 +6,5 @@ public enum EventType {
     MOVED_UP,
     MOVED_DOWN,
     MOVED_LEFT,
-    MOVED_RIGHT;
+    MOVED_RIGHT
 }

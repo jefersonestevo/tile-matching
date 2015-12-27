@@ -28,6 +28,6 @@ public class NumberBoardGenerator implements BoardGenerator {
 
     @Override
     public Tile getNewTileForPosition(Position position) {
-        return new NumberTyle(new Double(Math.random() * 5).intValue());
+        return new NumberTyle(Double.valueOf(Math.random() * 5).intValue());
     }
 }
